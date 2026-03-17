@@ -60,8 +60,8 @@ const AdminLayout = () => {
         <div className="flex items-center justify-between p-4 border-b border-border">
           {!collapsed && (
             <div className="flex items-center gap-2">
-              <InsanoLogo size={28} />
-              <span className="font-cinzel text-sm font-bold text-gold">QUARTEL GENERAL</span>
+              <ShieldCheck className="w-7 h-7 text-gold" />
+              <span className="font-cinzel text-sm font-bold text-gold">PAINEL DE CONTROLE</span>
             </div>
           )}
           <button

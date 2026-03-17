@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useSilentUpdate } from "@/hooks/useSilentUpdate";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
+import InsanoLogo from "./components/InsanoLogo";
 // Eagerly load structural components
 import RoleGuard from "./components/RoleGuard";
 import StudentGuard from "./components/StudentGuard";
@@ -70,12 +71,12 @@ const AppRoutes = () => {
   const isInstallRoute = location.pathname === "/instalar";
 
   if (loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#FF6B00' }}>
-      <img src="/insano-logo-branco.svg" alt="Shape Insano" className="w-32 h-32 object-contain animate-pulse" />
-      <div className="mt-6 w-48 h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}>
-        <div className="h-full rounded-full animate-loading-bar" style={{ backgroundColor: 'rgba(255,255,255,0.8)' }} />
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+      <InsanoLogo className="animate-pulse mb-6 text-xl" size={40} />
+      <div className="w-48 h-1.5 bg-secondary rounded-full overflow-hidden relative">
+        <div className="h-full bg-gold rounded-full animate-loading-bar" />
       </div>
-      <p className="mt-4 font-cinzel text-sm tracking-[0.3em] uppercase" style={{ color: 'rgba(255,255,255,0.7)' }}>
+      <p className="mt-4 font-cinzel text-sm tracking-[0.3em] uppercase text-gold/70">
         Carregando...
       </p>
     </div>

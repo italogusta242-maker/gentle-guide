@@ -4,89 +4,97 @@
 
 @layer base {
   :root {
-    /* DEFAULT: DARK MODE (Gladiador Sombrio) */
-    --background: 0 0% 2%;
-    --foreground: 0 0% 95%;
-
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 95%;
-
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 95%;
-
-    --primary: 25 100% 50%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 95%;
-
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 50%;
-
-    --accent: 25 100% 50%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14%;
-    --input: 0 0% 14%;
-    --ring: 25 100% 50%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 4%;
-    --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 25 100% 50%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: 25 100% 50%;
-
-    /* Custom GLADIADOR tokens - Dynamic per theme */
-    --gold: 42 96% 51%;
-    --gold-glow: 42 100% 58%;
-    --crimson: 25 100% 50%;
-    --crimson-glow: 25 100% 58%;
-    --obsidian: 0 0% 2%;
-    --marble: 0 0% 7%;
-    --marble-light: 0 0% 12%;
-  }
-
-  /* LIGHT MODE (Gladiador da Luz) */
-  [data-theme='light'] {
-    --background: 40 10% 96%; /* Bege mármore/Marfim */
-    --foreground: 0 0% 8%;
+    /* DEFAULT: LIGHT MODE (Miris No Foco) */
+    --background: 40 33% 98%; /* Cream / Off-white */
+    --foreground: 0 0% 15%; /* Soft dark gray */
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 8%;
+    --card-foreground: 0 0% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 8%;
+    --popover-foreground: 0 0% 15%;
 
-    --secondary: 0 0% 90%;
-    --secondary-foreground: 0 0% 10%;
+    --primary: 15 60% 50%; /* Terracotta */
+    --primary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 92%;
+    --secondary: 40 20% 90%; /* Soft beige */
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 40 10% 92%;
     --muted-foreground: 0 0% 45%;
 
-    --border: 0 0% 85%;
-    --input: 0 0% 88%;
-    --ring: 25 100% 50%;
+    --accent: 350 40% 40%; /* Wine */
+    --accent-foreground: 0 0% 100%;
 
-    --sidebar-background: 40 10% 92%;
-    --sidebar-foreground: 0 0% 10%;
-    --sidebar-accent: 0 0% 85%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 0 0% 80%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
 
-    /* Custom GLADIADOR tokens - Light version */
-    --obsidian: 40 10% 94%; /* Reverse obsidian to light */
-    --marble: 40 10% 90%;
-    --marble-light: 40 10% 100%;
-    --gold: 42 80% 40%; /* Slightly darker for contrast on light */
-    --crimson: 25 100% 45%;
+    --border: 40 20% 85%;
+    --input: 40 20% 90%;
+    --ring: 15 60% 50%;
+
+    --radius: 0.75rem; /* Softer, rounder corners */
+
+    --sidebar-background: 40 33% 96%;
+    --sidebar-foreground: 0 0% 15%;
+    --sidebar-primary: 15 60% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 90%;
+    --sidebar-accent-foreground: 0 0% 15%;
+    --sidebar-border: 40 20% 85%;
+    --sidebar-ring: 15 60% 50%;
+
+    /* Miris Tokens (repurposing old variables to avoid breaking components) */
+    --gold: 42 70% 60%; /* Soft gold */
+    --gold-glow: 42 80% 70%;
+    --crimson: 350 50% 40%; /* Wine (replaces crimson) */
+    --crimson-glow: 350 60% 50%;
+    --obsidian: 0 0% 15%; /* Soft dark */
+    --marble: 40 30% 96%;
+    --marble-light: 0 0% 100%;
+  }
+
+  /* DARK MODE (Miris Focus) */
+  [data-theme='dark'] {
+    --background: 0 0% 10%; /* Very dark warm gray */
+    --foreground: 40 20% 90%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 40 20% 90%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 40 20% 90%;
+
+    --primary: 15 60% 60%; /* Terracotta light */
+    --primary-foreground: 0 0% 10%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 40 20% 90%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 350 40% 50%; /* Wine light */
+    --accent-foreground: 0 0% 95%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 15 60% 60%;
+
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 40 20% 90%;
+    --sidebar-primary: 15 60% 60%;
+    --sidebar-primary-foreground: 0 0% 10%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 40 20% 90%;
+    --sidebar-border: 0 0% 20%;
+
+    /* Miris Tokens Dark */
+    --obsidian: 0 0% 8%; 
+    --marble: 0 0% 12%;
+    --marble-light: 0 0% 15%;
+    --gold: 42 70% 50%;
+    --crimson: 350 40% 40%;
   }
 
   /* Special states - These remain consistent but can be adjusted later if needed */
@@ -123,27 +131,27 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Sora', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 16px;
     font-weight: 400;
   }
 
   h1 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', serif;
     font-size: 45px;
     font-weight: 700;
     line-height: 1.15;
   }
 
   h2 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', serif;
     font-size: 25px;
     font-weight: 600;
     line-height: 1.3;
   }
 
   h3 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', serif;
     font-size: 20px;
     font-weight: 600;
     line-height: 1.4;
@@ -156,7 +164,7 @@
 
 @layer utilities {
   .font-cinzel {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', serif;
   }
 
   .text-1 {

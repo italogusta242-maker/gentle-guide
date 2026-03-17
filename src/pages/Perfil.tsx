@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { User, Weight, Ruler, Calendar, Percent, Camera, CreditCard, LogOut, ChevronRight, TrendingDown, Upload, Shield, Clock, MessageCircle, AlertTriangle, Bell, KeyRound } from "lucide-react";
+import { User, Weight, Ruler, Calendar, Percent, Camera, CreditCard, LogOut, ChevronRight, TrendingDown, Upload, Shield, Clock, MessageCircle, AlertTriangle, Bell, KeyRound, Check } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { Badge } from "@/components/ui/badge";
@@ -22,8 +22,13 @@ const Perfil = () => {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const nome = profile?.nome ?? "ATLETA";
+  const nome = profile?.nome ?? "MIRI";
   
+  // Mock data for completed months
+  const completedMonths = [
+    { title: "Janeiro ✓", id: 1 },
+    { title: "Fevereiro ✓", id: 2 }
+  ];
 
   const [editOpen, setEditOpen] = useState(false);
   const [subscriptionOpen, setSubscriptionOpen] = useState(false);
@@ -101,7 +106,7 @@ const Perfil = () => {
     if (val === 567) return "Trimestral PIX";
     if (val === 597) return "Trimestral Cartão";
     if (val === 297) return "Recorrente Mensal";
-    return "Shape Insano Pro";
+    return "Miris No Foco VIP";
   };
   const planName = derivePlanName();
   const planLabel = inviteData?.plan_value
@@ -116,8 +121,8 @@ const Perfil = () => {
       setEditForm({
         weight: profile.peso ? Number(profile.peso) : 0,
         height: profile.altura ? Number(profile.altura) : 0,
-        targetWeight: profile.meta_peso ? Number(profile.meta_peso) : 0,
-        age: profile.nascimento ? (() => { const a = Math.floor((Date.now() - new Date(profile.nascimento).getTime()) / (365.25 * 24 * 60 * 60 * 1000)); return a > 0 && a <= 120 ? a : 0; })() : 0,
+        targetWeight: (profile as any).meta_peso ? Number((profile as any).meta_peso) : 0,
+        age: (profile as any).nascimento ? (() => { const a = Math.floor((Date.now() - new Date((profile as any).nascimento).getTime()) / (365.25 * 24 * 60 * 60 * 1000)); return a > 0 && a <= 120 ? a : 0; })() : 0,
       });
       setNotifPreview((profile as any).notification_preview || "full");
     }
@@ -177,8 +182,8 @@ const Perfil = () => {
   };
 
 
-  const memberSince = profile?.created_at
-    ? new Date(profile.created_at).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
+  const memberSince = (profile as any)?.created_at
+    ? new Date((profile as any).created_at).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })
     : "—";
 
   const handleSaveNotifPreview = async (value: string) => {
@@ -233,8 +238,20 @@ const Perfil = () => {
         </div>
 
         <h2 className="font-cinzel text-xl font-bold text-foreground">{nome.toUpperCase()}</h2>
+        
+        {/* Month Badges */}
+        {completedMonths.length > 0 && (
+          <div className="flex flex-wrap gap-2 justify-center mt-3 mb-1">
+            {completedMonths.map(m => (
+              <Badge key={m.id} className="bg-accent/20 text-accent border border-accent/30 px-3 py-1 shadow-sm">
+                {m.title}
+              </Badge>
+            ))}
+          </div>
+        )}
+
         <div className="flex items-center gap-2 mt-2">
-          <Badge className="bg-primary/20 text-primary border-primary/30 text-xs font-semibold">
+          <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] font-semibold">
             {planLabel}
           </Badge>
           <span className="text-[11px] text-muted-foreground">No foco desde {memberSince}</span>
@@ -274,6 +291,32 @@ const Perfil = () => {
           </motion.div>
         ))}
       </div>
+
+      {/* Histórico de Meses Completados */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-card rounded-xl border border-border p-5 mt-4 group"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-cinzel text-sm font-bold text-foreground">Histórico de Ciclos</h3>
+          <Calendar size={18} className="text-muted-foreground" />
+        </div>
+        <div className="space-y-3">
+           {completedMonths.map(m => (
+             <div key={m.id} className="flex items-center justify-between p-3 rounded-lg bg-secondary/30 border border-border/50 hover:border-accent/40 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                     <Check size={14} />
+                  </div>
+                  <span className="text-sm font-bold text-foreground">{m.title.replace(' ✓', '')}</span>
+                </div>
+                <span className="text-[10px] font-black tracking-widest text-accent uppercase bg-accent/10 px-3 py-1 rounded-full">100% Concluído</span>
+             </div>
+           ))}
+        </div>
+      </motion.div>
 
       {/* Action Menu */}
       <motion.div
@@ -453,7 +496,7 @@ const Perfil = () => {
               <p className="text-xs font-semibold text-muted-foreground mb-1">Exemplo de notificação:</p>
               <div className="bg-background rounded-lg p-3 border border-border">
                 <p className="text-sm font-semibold text-foreground">
-                  {notifPreview === "none" ? "Shape Insano" : "Nutricionista João"}
+                  {notifPreview === "none" ? "Miris No Foco" : "Nutricionista João"}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   {notifPreview === "full" && "Oi, já revisei sua dieta de hoje e fiz alguns ajustes..."}

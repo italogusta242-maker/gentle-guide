@@ -57,6 +57,7 @@ export async function submitAnamnese(
         bairro: userData.bairro || null,
         meta_peso: userData.meta_peso || null,
         como_chegou: userData.como_chegou || null,
+        planner_type: userData.planner_type || null,
         onboarded: true,
       })
       .eq("id", user.id);
@@ -164,7 +165,39 @@ export async function submitAnamnese(
         .eq("id", anamneseData.id);
     }
 
-    // 6. Send data to Google Sheets
+    // 6. Automatic plan assignment (Remover dependência de análise humana)
+    try {
+      const obj = userData.objetivo || "tonificar";
+      let planTitle = "Plano Miris - Tonificação";
+      if (obj === "emagrecer") planTitle = "Plano Miris - Emagrecimento";
+      else if (obj === "manter_foco") planTitle = "Plano Miris - Manutenção";
+
+      // Create Training Plan (UI uses fallbackGroups when groups is null/empty)
+      await supabase.from("training_plans").insert({
+        user_id: user.id,
+        title: planTitle,
+        active: true,
+        total_sessions: 30,
+        groups: null,
+      });
+
+      // Create Diet Plan (UI uses fallback when meals is null/empty)
+      await supabase.from("diet_plans").insert({
+        user_id: user.id,
+        title: `Cardápio - ${planTitle}`,
+        active: true,
+        daily_calories: obj === "emagrecer" ? 1600 : 2000,
+        water_goal_liters: 2.5,
+        meals: null,
+      });
+
+      // Also set status to ATIVO directly to skip analysis waiting
+      await supabase.from("profiles").update({ status: "ativo" }).eq("id", user.id);
+    } catch (autoErr) {
+      console.error("Erro na atribuicao automatica:", autoErr);
+    }
+
+    // 7. Send data to Google Sheets
     try {
       const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxy2VcEx_Yntb9y7kQKR_CYuLpDLOuDPqsGZEbdK7mnGPsjdTv3NgFY7chAq2G7rs7ifw/exec";
       const sheetData: Record<string, any> = {};

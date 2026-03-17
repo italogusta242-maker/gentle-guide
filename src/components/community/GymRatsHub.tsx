@@ -15,7 +15,7 @@ export function GymRatsHub() {
         return [
           { user_id: "1", nome: "Marcus Aurelius", xp: 12500, level: 12, points: 450, change: 'up', position: 1 },
           { user_id: "2", nome: "Seneca", xp: 11200, level: 11, points: 420, change: 'down', position: 2 },
-          { user_id: user?.id, nome: "Você (Gladiador)", xp: 9500, level: 9, points: 380, change: 'none', position: 3 },
+          { user_id: user?.id, nome: "Você (Miri)", xp: 9500, level: 9, points: 380, change: 'none', position: 3 },
           { user_id: "4", nome: "Epictetus", xp: 8900, level: 8, points: 350, change: 'up', position: 4 },
           { user_id: "5", nome: "Musonius Rufus", xp: 7500, level: 7, points: 310, change: 'down', position: 5 },
         ];

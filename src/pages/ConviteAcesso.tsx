@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { ShieldCheck, Loader2, UserCheck } from "lucide-react";
+import { Loader2, UserCheck } from "lucide-react";
 
 const ConviteAcesso = () => {
   const { token } = useParams<{ token: string }>();
@@ -99,8 +99,8 @@ const ConviteAcesso = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#f40001" }}>
-        <img src="/insano-icon-192.png" alt="Shape Insano" className="w-32 h-32 object-contain animate-pulse" />
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+        <InsanoLogo className="animate-pulse mb-6 text-xl" size={40} />
       </div>
     );
   }
@@ -112,7 +112,7 @@ const ConviteAcesso = () => {
         <h1 className="text-2xl font-cinzel font-bold text-foreground">Convite Inválido</h1>
         <p className="text-muted-foreground max-w-md">
           Este link de convite é inválido, já foi utilizado, expirou ou não possui CPF cadastrado. 
-          Entre em contato com a equipe Shape Insano para obter um novo link.
+          Entre em contato com nossa equipe para obter um novo link.
         </p>
         <Button variant="outline" onClick={() => navigate("/")}>
           Ir para o login
@@ -130,7 +130,7 @@ const ConviteAcesso = () => {
             Bem-vindo à Elite
           </h1>
           <p className="text-muted-foreground text-sm">
-            Confirme seus dados para acessar o Shape Insano PRO
+            Confirme seus dados para acessar o INFOSAAS ANAAC
           </p>
         </div>
 
@@ -191,7 +191,7 @@ const ConviteAcesso = () => {
         </div>
 
         <p className="text-center text-xs text-muted-foreground/50">
-          Shape Insano PRO — Consultoria de Elite
+          INFOSAAS ANAAC — Inovação e Gestão
         </p>
       </div>
     </div>

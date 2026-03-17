@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { SFX } from "@/hooks/useSoundEffects";
 import { optimisticFlameUpdate } from "@/lib/flameOptimistic";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Dumbbell, UtensilsCrossed, MessageCircle, TrendingUp, Calendar, AlertTriangle, ClipboardList, ChevronRight, X, Droplets, Plus, Minus, Flame, Bell, User } from "lucide-react";
+import { Brain, Dumbbell, UtensilsCrossed, MessageCircle, TrendingUp, Calendar, AlertTriangle, ClipboardList, ChevronRight, X, Droplets, Plus, Minus, Flame, Bell, User, Check, Moon } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import InsanoLogo from "@/components/InsanoLogo";
 import DailyCheckIn, { type MentalState, mentalStateLabels, type CheckInResult } from "@/components/DailyCheckIn";
@@ -141,6 +141,45 @@ const Dashboard = () => {
       return next;
     });
   };
+
+  // --- Habit Tracker State ---
+  const todayKey = `habits_${new Date().toISOString().split('T')[0]}_${user?.id || 'guest'}`;
+  const [habits, setHabits] = useState({ treinou: false, dieta: false, agua: false, sono: false });
+  useEffect(() => {
+    const saved = localStorage.getItem(todayKey);
+    if (saved) {
+      try { setHabits(JSON.parse(saved)); } catch (e) {}
+    }
+  }, [todayKey]);
+
+  const updateHabit = (key: keyof typeof habits, value: boolean) => {
+    const newHabits = { ...habits, [key]: value };
+    setHabits(newHabits);
+    localStorage.setItem(todayKey, JSON.stringify(newHabits));
+    if (value) {
+      try { SFX.tap(); } catch (e) {}
+    }
+  };
+
+  const HabitCheckbox = ({ label, checked, onChange, Icon }: any) => (
+    <button 
+      onClick={() => onChange(!checked)}
+      className={`flex items-center gap-3 p-3 rounded-2xl border transition-all ${
+        checked 
+          ? 'bg-accent/10 border-accent/30 shadow-[0_0_15px_rgba(255,107,0,0.1)]' 
+          : 'bg-secondary/20 border-border hover:border-accent/30'
+      }`}
+    >
+      <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+        checked ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'bg-background/50 text-muted-foreground'
+      }`}>
+        {checked ? <Check size={16} strokeWidth={3} /> : <Icon size={16} />}
+      </div>
+      <span className={`text-sm font-bold tracking-tight transition-colors ${checked ? 'text-foreground' : 'text-muted-foreground'}`}>
+        {label}
+      </span>
+    </button>
+  );
 
   const [showPerformanceModal, setShowPerformanceModal] = useState(false);
 
@@ -418,11 +457,11 @@ const Dashboard = () => {
         </div>
 
 
-        {/* Coliseu Hero Card - Mobile */}
+        {/* Desafio Hero Card - Mobile */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative rounded-3xl p-6 shadow-2xl overflow-hidden bg-gradient-to-br from-[#FF6B00] to-[#FF8C33] dark:from-card dark:to-card border-none dark:border dark:border-border"
+          className="relative rounded-3xl p-6 shadow-2xl overflow-hidden bg-gradient-to-br from-[#7B3F3F] to-[#A0522D] dark:from-card dark:to-card border-none dark:border dark:border-border"
         >
           {/* Subtle Background Glow - only in dark mode */}
           <div className="absolute -top-24 -right-24 w-48 h-48 bg-accent/10 rounded-full blur-[80px] dark:block hidden" />
@@ -448,7 +487,7 @@ const Dashboard = () => {
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate("/aluno/treinos")}
                 disabled={!hasTrainingPlan}
-                className="px-8 py-3 bg-white dark:bg-gradient-to-r dark:from-[#FF6B00] dark:to-[#FF8C33] text-accent dark:text-white font-cinzel font-black text-sm rounded-xl tracking-[0.15em] shadow-xl disabled:opacity-50 disabled:shadow-none uppercase"
+                className="px-8 py-3 bg-white dark:bg-gradient-to-r dark:from-[#7B3F3F] dark:to-[#A0522D] text-[#7B3F3F] dark:text-white font-cinzel font-black text-sm rounded-xl tracking-[0.15em] shadow-xl disabled:opacity-50 disabled:shadow-none uppercase"
               >
                 {hasTrainingPlan ? "Iniciar Treino" : "Aguardando Plano"}
               </motion.button>
@@ -478,7 +517,7 @@ const Dashboard = () => {
                </svg>
                  <div className="absolute inset-0 flex flex-col items-center justify-center pt-1">
                  <Flame size={24} className="text-white dark:text-accent animate-pulse mb-1" />
-                 <span className="text-xl font-cinzel font-bold text-white dark:text-foreground leading-none">{adherence}%</span>
+                 <span className="text-xl font-sans font-bold text-white dark:text-foreground leading-none adesao-number">{adherence}%</span>
                  <span className="text-[8px] font-cinzel font-bold text-white/80 dark:text-accent tracking-tighter mt-1 uppercase">Adesão</span>
                </div>
             </div>
@@ -627,53 +666,44 @@ const Dashboard = () => {
           })()}
         </AnimatePresence>
 
-        {/* Metas Diárias - Mobile */}
+        {/* Daily Goals - Mobile */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.39 }}
           className={`${cardBg} rounded-xl border ${cardBorder} p-4 relative z-10`}
         >
-          <h3 className="font-cinzel text-sm font-bold text-foreground mb-3">Metas Diárias</h3>
-          <div className="space-y-3">
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-muted-foreground">Refeições</span>
-                <span className="text-foreground font-semibold">{mealsCompleted} / {dailyGoals.totalMeals}</span>
-              </div>
-              <div className="h-2 rounded-full overflow-hidden bg-muted/60 dark:bg-muted">
-                <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((mealsCompleted / dailyGoals.totalMeals) * 100, 100)}%`, background: mealBarColor }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-muted-foreground">Sono</span>
-                <span className="text-foreground font-semibold">{sleepHours.toFixed(1)}h / {dailyGoals.sleepGoal}h</span>
-              </div>
-              <div className="h-2 rounded-full overflow-hidden bg-muted/60 dark:bg-muted">
-                <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((sleepHours / dailyGoals.sleepGoal) * 100, 100)}%`, background: sleepBarColor }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-muted-foreground">Água</span>
-                <span className="text-foreground font-semibold">{waterIntake.toFixed(1)}L / {dailyGoals.waterGoal}L</span>
-              </div>
-              <div className="h-2 rounded-full overflow-hidden bg-muted/60 dark:bg-muted">
-                <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((waterIntake / dailyGoals.waterGoal) * 100, 100)}%`, background: waterBarColor }} />
-              </div>
-              <div className="flex items-center justify-center gap-3 mt-2">
-                <button onClick={() => setWaterIntake(Math.max(0, waterIntake - 0.25))}
-                  className="w-7 h-7 rounded-full bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors border border-border">
-                  <Minus size={14} className="text-foreground" />
-                </button>
-                <div className="flex items-center gap-1">
-                  <Droplets size={14} className={dropletsClass} />
-                  <span className="text-xs text-muted-foreground">250ml</span>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-cinzel text-sm font-bold text-primary">Metas Diárias</h3>
+          </div>
+          <div className="space-y-4">
+             {/* Refeições Concluídas */}
+             <div>
+                <div className="flex justify-between text-xs text-muted mb-1 font-medium">
+                  <span className="flex items-center gap-1"><UtensilsCrossed size={12} className={iconAccentClass} /> Refeições do Cardápio</span>
+                  <span className="font-bold text-foreground">{mealsCompleted} / {dailyGoals.totalMeals}</span>
                 </div>
-                <button onClick={() => { setWaterIntake(Math.min(10, waterIntake + 0.25)); try { SFX.waterDrop(); } catch {} }}
-                  className="w-7 h-7 rounded-full bg-muted/50 hover:bg-muted flex items-center justify-center transition-colors border border-border">
-                  <Plus size={14} className="text-foreground" />
-                </button>
-              </div>
-            </div>
+                <Progress value={(mealsCompleted / dailyGoals.totalMeals) * 100} className="h-2" indicatorColor={mealBarColor} />
+             </div>
+
+             {/* Água (Adição manual) */}
+             <div>
+               <div className="flex justify-between items-center text-xs text-muted mb-1 font-medium">
+                 <span className="flex items-center gap-1"><Droplets size={12} className={dropletsClass} /> Água</span>
+                 <div className="flex items-center gap-2">
+                   <button onClick={() => setWaterIntake(Math.max(0, waterIntake - 0.25))} className="p-1 rounded bg-secondary active:scale-95 transition-transform"><Minus size={12} /></button>
+                   <span className="font-bold text-foreground w-12 text-center">{waterIntake.toFixed(2)}L <span className="text-muted-foreground font-normal">/ {dailyGoals.waterGoal}L</span></span>
+                   <button onClick={() => setWaterIntake(waterIntake + 0.25)} className="p-1 rounded bg-secondary active:scale-95 transition-transform"><Plus size={12} /></button>
+                 </div>
+               </div>
+               <Progress value={(waterIntake / dailyGoals.waterGoal) * 100} className="h-2" indicatorColor={waterBarColor} />
+             </div>
+             
+             {/* Sono */}
+             <div>
+                <div className="flex justify-between text-xs text-muted mb-1 font-medium">
+                  <span className="flex items-center gap-1"><Moon size={12} className={iconAccentClass} /> Sono Otimizado</span>
+                  <span className="font-bold text-foreground">{sleepHours} / {dailyGoals.sleepGoal}h</span>
+                </div>
+                <Progress value={(sleepHours / dailyGoals.sleepGoal) * 100} className="h-2" indicatorColor={sleepBarColor} />
+             </div>
           </div>
         </motion.div>
 
@@ -735,7 +765,7 @@ const Dashboard = () => {
            <div>
             <p className="text-xs font-cinzel font-semibold tracking-[0.3em] text-accent mb-1">BEM-VINDO AO COLISEU</p>
             <h1 className="font-cinzel text-3xl font-bold flex items-center">
-              <span className="text-foreground">{profile?.nome?.toUpperCase() || "GLADIADOR"}</span>
+              <span className="text-foreground">{profile?.nome?.toUpperCase() || "MIRI"}</span>
               <span className="text-accent mx-3">—</span>
               <span className="text-accent">{mentalStateLabels[mentalState].label}</span>
             </h1>
@@ -759,7 +789,7 @@ const Dashboard = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative rounded-3xl bg-gradient-to-br from-[#FF6B00] to-[#FF8C33] dark:from-[#0A0A0A] dark:to-[#0A0A0A] border-none dark:border dark:border-white/5 p-10 overflow-hidden shadow-2xl flex items-center justify-between gap-12"
+          className="relative rounded-3xl bg-gradient-to-br from-[#7B3F3F] to-[#A0522D] dark:from-[#0A0A0A] dark:to-[#0A0A0A] border-none dark:border dark:border-white/5 p-10 overflow-hidden shadow-2xl flex items-center justify-between gap-12"
         >
           {/* Background Glows */}
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-accent/5 rounded-full blur-[120px]" />
@@ -785,7 +815,7 @@ const Dashboard = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate("/aluno/treinos")}
               disabled={!hasTrainingPlan}
-              className="px-10 py-5 bg-white text-accent dark:bg-gradient-to-r dark:from-[#FF6B00] dark:to-[#FF8C33] dark:text-white font-cinzel font-black text-lg rounded-2xl tracking-[0.2em] shadow-xl dark:shadow-accent/20 disabled:opacity-50 disabled:shadow-none uppercase border-none dark:border dark:border-white/10"
+              className="px-10 py-5 bg-white text-[#7B3F3F] dark:bg-gradient-to-r dark:from-[#7B3F3F] dark:to-[#A0522D] dark:text-white font-cinzel font-black text-lg rounded-2xl tracking-[0.2em] shadow-xl dark:shadow-accent/20 disabled:opacity-50 disabled:shadow-none uppercase border-none dark:border dark:border-white/10"
             >
               {hasTrainingPlan ? "Iniciar Treino Agora" : "Aguardando Plano"}
             </motion.button>
@@ -816,7 +846,7 @@ const Dashboard = () => {
                </svg>
                <div className="absolute inset-0 flex flex-col items-center justify-center">
                  <Flame size={72} className="text-white dark:text-accent animate-pulse mb-3" />
-                 <span className="text-6xl font-cinzel font-black text-white">{adherence}%</span>
+                 <span className="text-6xl font-sans font-bold text-white adesao-number">{adherence}%</span>
                  <span className="text-sm font-cinzel font-bold text-white/80 dark:text-accent tracking-[0.4em] mt-2 uppercase">Adesão</span>
                </div>
              </div>
@@ -838,54 +868,42 @@ const Dashboard = () => {
 
       {/* Balanced 3-Column Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-        {/* COLUMN 1: Daily Targets */}
+        {/* COLUMN 1: Daily Goals Desktop */}
         <div className="space-y-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            className={`${cardBg} rounded-3xl border ${cardBorder} p-8 shadow-xl`}
+            className={`${cardBg} rounded-3xl border ${cardBorder} p-8 shadow-xl relative z-10 flex flex-col gap-6`}
           >
-            <h3 className="font-cinzel text-lg font-bold text-primary mb-6">Metas Diárias</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-cinzel text-xl font-bold text-primary">Metas Diárias</h3>
+            </div>
             <div className="space-y-6">
-              <div>
-                <div className="flex justify-between text-xs mb-2">
-                  <span className="text-muted">Refeições</span>
-                  <span className="text-primary font-semibold uppercase tracking-wider">{mealsCompleted} / {dailyGoals.totalMeals}</span>
-                </div>
-                <div className="h-2.5 rounded-full overflow-hidden bg-secondary">
-                  <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((mealsCompleted / dailyGoals.totalMeals) * 100, 100)}%`, background: mealBarColor }} />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs mb-2">
-                  <span className="text-muted">Sono</span>
-                  <span className="text-primary font-semibold uppercase tracking-wider">{sleepHours.toFixed(1)}h / {dailyGoals.sleepGoal}h</span>
-                </div>
-                <div className="h-2.5 rounded-full overflow-hidden bg-secondary">
-                  <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((sleepHours / dailyGoals.sleepGoal) * 100, 100)}%`, background: sleepBarColor }} />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs mb-2">
-                  <span className="text-muted">Água</span>
-                  <span className="text-primary font-semibold uppercase tracking-wider">{waterIntake.toFixed(1)}L / {dailyGoals.waterGoal}L</span>
-                </div>
-                <div className="h-2.5 rounded-full overflow-hidden bg-secondary">
-                  <div className="h-full rounded-full transition-all" style={{ width: `${Math.min((waterIntake / dailyGoals.waterGoal) * 100, 100)}%`, background: waterBarColor }} />
-                </div>
-                <div className="flex items-center justify-center gap-4 mt-4">
-                  <button onClick={() => setWaterIntake(Math.max(0, waterIntake - 0.25))}
-                    className="w-10 h-10 rounded-full bg-secondary/50 hover:bg-secondary flex items-center justify-center transition-all border border-border hover:border-border active:scale-95 shadow-lg group">
-                    <Minus size={18} className="text-primary group-hover:text-accent transition-colors" />
-                  </button>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <Droplets size={20} className={`${dropletsClass} animate-bounce-slow`} />
-                    <span className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">250ml</span>
+               <div className="bg-secondary/20 p-4 rounded-2xl border border-secondary/50">
+                  <div className="flex justify-between text-sm text-muted mb-2 font-medium">
+                    <span className="flex items-center gap-2"><UtensilsCrossed size={16} className={iconAccentClass} /> Refeições do Cardápio</span>
+                    <span className="font-bold text-foreground">{mealsCompleted} / {dailyGoals.totalMeals}</span>
                   </div>
-                  <button onClick={() => { setWaterIntake(Math.min(10, waterIntake + 0.25)); try { SFX.waterDrop(); } catch {} }}
-                    className="w-10 h-10 rounded-full bg-secondary/50 hover:bg-secondary flex items-center justify-center transition-all border border-border hover:border-border active:scale-95 shadow-lg group">
-                    <Plus size={18} className="text-primary group-hover:text-accent transition-colors" />
-                  </button>
-                </div>
-              </div>
+                  <Progress value={(mealsCompleted / dailyGoals.totalMeals) * 100} className="h-3" indicatorColor={mealBarColor} />
+               </div>
+
+               <div className="bg-secondary/20 p-4 rounded-2xl border border-secondary/50">
+                 <div className="flex justify-between items-center text-sm text-muted mb-2 font-medium">
+                   <span className="flex items-center gap-2"><Droplets size={16} className={dropletsClass} /> Consumo de Água</span>
+                   <div className="flex items-center gap-3">
+                     <button onClick={() => setWaterIntake(Math.max(0, waterIntake - 0.25))} className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 active:scale-95 transition-transform"><Minus size={14} /></button>
+                     <span className="font-bold text-foreground w-16 text-center">{waterIntake.toFixed(2)}L <span className="text-muted-foreground font-normal">/ {dailyGoals.waterGoal}L</span></span>
+                     <button onClick={() => setWaterIntake(waterIntake + 0.25)} className="p-1.5 rounded-lg bg-secondary hover:bg-secondary/80 active:scale-95 transition-transform"><Plus size={14} /></button>
+                   </div>
+                 </div>
+                 <Progress value={(waterIntake / dailyGoals.waterGoal) * 100} className="h-3" indicatorColor={waterBarColor} />
+               </div>
+               
+               <div className="bg-secondary/20 p-4 rounded-2xl border border-secondary/50">
+                  <div className="flex justify-between text-sm text-muted mb-2 font-medium">
+                    <span className="flex items-center gap-2"><Moon size={16} className={iconAccentClass} /> Sono Otimizado</span>
+                    <span className="font-bold text-foreground">{sleepHours} / {dailyGoals.sleepGoal}h</span>
+                  </div>
+                  <Progress value={(sleepHours / dailyGoals.sleepGoal) * 100} className="h-3" indicatorColor={sleepBarColor} />
+               </div>
             </div>
           </motion.div>
         </div>
@@ -899,7 +917,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="font-cinzel text-lg font-bold text-primary">Evolução de Performance</h3>
-                  <p className="text-xs text-muted mt-1 uppercase tracking-tight">Sua trajetória rumo ao topo do Coliseu</p>
+                  <p className="text-xs text-muted mt-1 uppercase tracking-tight">Sua trajetória rumo ao topo do Desafio</p>
                 </div>
                 <span className="text-[10px] text-muted px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors font-cinzel font-bold">DETALHES COMPLETOS →</span>
               </div>
@@ -1030,6 +1048,7 @@ const Dashboard = () => {
 
       <DailyCheckIn
         open={showCheckIn}
+        plannerType={(profile as any)?.planner_type}
         onComplete={async (result) => {
           setMentalState(result.mentalState);
           localStorage.setItem("lastCheckIn", new Date().toDateString());

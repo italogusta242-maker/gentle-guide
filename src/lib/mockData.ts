@@ -1,6 +1,6 @@
 
 /**
- * Mock data for the Shape Insano ecosystem.
+ * Mock data for the Miris No Foco ecosystem.
  * Used for rapid UI prototyping "Lovable-style".
  */
 

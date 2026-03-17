@@ -261,7 +261,7 @@ const AdminDashboard = () => {
     <div className="space-y-6">
       <div>
         <h1 className="font-cinzel text-2xl font-bold text-foreground">Quartel General</h1>
-        <p className="text-sm text-muted-foreground">Visão consolidada da plataforma SHAPE INSANO</p>
+        <p className="text-sm text-muted-foreground">Visão consolidada da plataforma INFOSAAS ANAAC</p>
       </div>
 
       <PendingStudentsPanel />

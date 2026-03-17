@@ -264,7 +264,7 @@ const Onboarding = ({ onComplete }: OnboardingProps) => {
                 <div><Label className="text-muted-foreground text-xs">Peso atual (kg) <span className="text-primary">*</span></Label><Input type="number" className={`${fc} ${errorBorder("peso")}`} value={userData.peso} onChange={(e) => u("peso", e.target.value)} placeholder="80" /></div>
               </div>
               <div><Label className="text-muted-foreground text-xs">Meta de peso (kg)</Label><Input type="number" className={fc} value={userData.meta_peso} onChange={(e) => u("meta_peso", e.target.value)} placeholder="75" /></div>
-              <div><Label className="text-muted-foreground text-xs">Quais fatores te fizeram escolher o Clube Shape Insano? <span className="text-primary">*</span></Label><Textarea className={`${fc} ${errorBorder("fatores_escolha")}`} value={userData.fatores_escolha} onChange={(e) => u("fatores_escolha", e.target.value)} placeholder="Conte-nos o que te motivou..." rows={2} /></div>
+              <div><Label className="text-muted-foreground text-xs">Quais fatores te fizeram escolher nossa consultoria? <span className="text-primary">*</span></Label><Textarea className={`${fc} ${errorBorder("fatores_escolha")}`} value={userData.fatores_escolha} onChange={(e) => u("fatores_escolha", e.target.value)} placeholder="Conte-nos o que te motivou..." rows={2} /></div>
               <div>
                 <Label className="text-muted-foreground text-xs">Você veio por indicação? <span className="text-primary">*</span></Label>
                 <Select value={userData.indicacao} onValueChange={(v) => u("indicacao", v)}>
@@ -324,41 +324,122 @@ const Onboarding = ({ onComplete }: OnboardingProps) => {
         {/* OBJETIVO */}
         {step === "objetivo" && (
           <motion.div key="objetivo" {...stepMotion} className="max-w-lg w-full space-y-5 pb-8">
-            <SectionHeader icon={Target} title="Objetivo" subtitle="Qual é o seu objetivo principal?" />
-            <div className="space-y-4">
-              <div>
-                <Label className="text-muted-foreground text-xs">Objetivo principal <span className="text-primary">*</span></Label>
-                <Select value={userData.objetivo} onValueChange={(v) => u("objetivo", v)}>
-                  <SelectTrigger className={fc}><SelectValue placeholder="Selecione" /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="massa">Ganho de massa muscular</SelectItem>
-                    <SelectItem value="gordura">Perda de gordura</SelectItem>
-                    <SelectItem value="profissionais">Deixo para os profissionais avaliarem</SelectItem>
-                    <SelectItem value="outro">Outro</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {userData.objetivo === "outro" && (
-                <div><Label className="text-muted-foreground text-xs">Descreva seu objetivo</Label><Input className={fc} value={userData.objetivo_outro} onChange={(e) => u("objetivo_outro", e.target.value)} /></div>
-              )}
-              <div>
-                <Label className="text-muted-foreground text-xs">Pretende ser atleta de fisiculturismo?</Label>
-                <Select value={userData.fisiculturismo} onValueChange={(v) => u("fisiculturismo", v)}>
-                  <SelectTrigger className={fc}><SelectValue placeholder="Selecione" /></SelectTrigger>
-                  <SelectContent><SelectItem value="sim">Sim</SelectItem><SelectItem value="nao">Não</SelectItem></SelectContent>
-                </Select>
-              </div>
-              {userData.fisiculturismo === "sim" && (
-                <div className="space-y-3 pl-3 border-l-2 border-primary/30">
-                  <p className="text-xs text-muted-foreground">Envie fotos posando na categoria pretendida:</p>
-                  <FileUploadField label="Pose de frente" value={userData.foto_pose_frente} onChange={(f) => u("foto_pose_frente", f)} />
-                  <FileUploadField label="Pose de lado" value={userData.foto_pose_lado} onChange={(f) => u("foto_pose_lado", f)} />
-                  <FileUploadField label="Pose de costas" value={userData.foto_pose_costas} onChange={(f) => u("foto_pose_costas", f)} />
+            <SectionHeader icon={Target} title="Objetivo e Planner" subtitle="Alinhando sua rota de sucesso" />
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-muted-foreground text-xs">Objetivo principal <span className="text-primary">*</span></Label>
+                  <Select value={userData.objetivo} onValueChange={(v) => u("objetivo", v)}>
+                    <SelectTrigger className={fc}><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="emagrecer">Emagrecer</SelectItem>
+                      <SelectItem value="tonificar">Tonificar</SelectItem>
+                      <SelectItem value="manter_foco">Manter o Foco</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-              )}
-              <div><Label className="text-muted-foreground text-xs">Influenciador favorito além do Igor (@ do Instagram)</Label><Input className={fc} value={userData.influenciador_favorito} onChange={(e) => u("influenciador_favorito", e.target.value)} placeholder="@exemplo" /></div>
+                {userData.objetivo === "outro" && (
+                  <div><Label className="text-muted-foreground text-xs">Descreva seu objetivo</Label><Input className={fc} value={userData.objetivo_outro} onChange={(e) => u("objetivo_outro", e.target.value)} /></div>
+                )}
+                <div>
+                  <Label className="text-muted-foreground text-xs">Pretende ser atleta de fisiculturismo?</Label>
+                  <Select value={userData.fisiculturismo} onValueChange={(v) => u("fisiculturismo", v)}>
+                    <SelectTrigger className={fc}><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <SelectContent><SelectItem value="sim">Sim</SelectItem><SelectItem value="nao">Não</SelectItem></SelectContent>
+                  </Select>
+                </div>
+                {userData.fisiculturismo === "sim" && (
+                  <div className="space-y-3 pl-3 border-l-2 border-primary/30">
+                    <p className="text-xs text-muted-foreground">Envie fotos posando na categoria pretendida:</p>
+                    <FileUploadField label="Pose de frente" value={userData.foto_pose_frente} onChange={(f) => u("foto_pose_frente", f)} />
+                    <FileUploadField label="Pose de lado" value={userData.foto_pose_lado} onChange={(f) => u("foto_pose_lado", f)} />
+                    <FileUploadField label="Pose de costas" value={userData.foto_pose_costas} onChange={(f) => u("foto_pose_costas", f)} />
+                  </div>
+                )}
+                <div><Label className="text-muted-foreground text-xs">Influenciador favorito além do Igor (@ do Instagram)</Label><Input className={fc} value={userData.influenciador_favorito} onChange={(e) => u("influenciador_favorito", e.target.value)} placeholder="@exemplo" /></div>
+              </div>
+
+              {/* PLANNER SELECTION */}
+              <div className="pt-4 border-t border-border space-y-4">
+                <div>
+                  <Label className="text-foreground text-sm font-cinzel font-bold">Selecione seu Planner Mensal <span className="text-primary">*</span></Label>
+                  <p className="text-xs text-muted-foreground mb-3">O planner define os hábitos e metas que você buscará atingir neste mês no seu Chekin Diário.</p>
+                  
+                  <div className="space-y-3">
+                    {/* Elite */}
+                    <button 
+                      onClick={() => u("planner_type", "elite")}
+                      className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                        userData.planner_type === "elite" 
+                          ? "border-[#D4AF37] bg-[#D4AF37]/10" 
+                          : "border-border bg-card hover:border-[#D4AF37]/50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${userData.planner_type === "elite" ? "bg-[#D4AF37]/20" : "bg-secondary"}`}>
+                          <Target className={userData.planner_type === "elite" ? "text-[#D4AF37]" : "text-muted-foreground"} size={20} />
+                        </div>
+                        <div>
+                          <h4 className={`font-cinzel font-bold ${userData.planner_type === "elite" ? "text-[#D4AF37]" : "text-foreground"}`}>
+                            Planner Elite 100%
+                          </h4>
+                          <p className="text-[10px] text-muted-foreground">O desafio máximo. Dieta rígida, sem açúcar, autocuidado diário e treinos pesados.</p>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Foco Essencial */}
+                    <button 
+                      onClick={() => u("planner_type", "foco_essencial")}
+                      className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                        userData.planner_type === "foco_essencial" 
+                          ? "border-[#7B3F3F] bg-[#7B3F3F]/10" 
+                          : "border-border bg-card hover:border-[#7B3F3F]/50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${userData.planner_type === "foco_essencial" ? "bg-[#7B3F3F]/20" : "bg-secondary"}`}>
+                          <Brain className={userData.planner_type === "foco_essencial" ? "text-[#7B3F3F]" : "text-muted-foreground"} size={20} />
+                        </div>
+                        <div>
+                          <h4 className={`font-cinzel font-bold ${userData.planner_type === "foco_essencial" ? "text-[#7B3F3F]" : "text-foreground"}`}>
+                            Planner Foco Essencial
+                          </h4>
+                          <p className="text-[10px] text-muted-foreground">Equilíbrio e saúde. Foco na redução de industrializados, leitura e hidratação.</p>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Constância */}
+                    <button 
+                      onClick={() => u("planner_type", "constancia")}
+                      className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                        userData.planner_type === "constancia" 
+                          ? "border-[#A0522D] bg-[#A0522D]/10" 
+                          : "border-border bg-card hover:border-[#A0522D]/50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${userData.planner_type === "constancia" ? "bg-[#A0522D]/20" : "bg-secondary"}`}>
+                          <Dumbbell className={userData.planner_type === "constancia" ? "text-[#A0522D]" : "text-muted-foreground"} size={20} />
+                        </div>
+                        <div>
+                          <h4 className={`font-cinzel font-bold ${userData.planner_type === "constancia" ? "text-[#A0522D]" : "text-foreground"}`}>
+                            Planner Constância Em Foco
+                          </h4>
+                          <p className="text-[10px] text-muted-foreground">O passo inicial perfeitamente executado. Criação do hábito do treino, steps e sono.</p>
+                        </div>
+                      </div>
+                    </button>
+                    
+                    {validationErrors.includes("planner_type") && (
+                      <p className="text-destructive text-xs mt-1">Selecione um planner obrigatório.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
-            <NavigationButtons onAdvance={nextStep} />
+            <NavigationButtons onAdvance={validateAndAdvance} />
           </motion.div>
         )}
 

@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        cinzel: ['Sora', 'sans-serif'],
-        sans: ['Sora', 'sans-serif'],
+        cinzel: ['Playfair Display', 'serif'],
+        sans: ['Montserrat', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

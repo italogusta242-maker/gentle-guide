@@ -28,7 +28,7 @@ export default function Comunidade() {
             COMUNI<span className="text-accent">DADE</span>
           </h1>
           <p className="text-muted-foreground text-sm tracking-widest uppercase">
-            Shape Insano • Gladiador
+            Miris No Foco • Miri
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export default function Comunidade() {
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === "gymrats" ? "bg-accent text-white shadow-[0_0_15px_rgba(255,107,0,0.3)]" : "text-muted-foreground hover:text-foreground"}`}
           >
             <Trophy size={18} />
-            Gym Rats
+            Ranking do Mês
           </button>
         </div>
 

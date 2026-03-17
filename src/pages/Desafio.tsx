@@ -16,9 +16,11 @@ import {
   MessageCircle,
   Clock,
   ExternalLink,
-  Flame
+  Flame,
+  Star
 } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 // --- Mock Data ---
 
@@ -27,7 +29,7 @@ const banners = [
     id: 1,
     titleTop: "O QUE TEM NO",
     titleMain: "DESAFIO",
-    subtitle: "Descubra como transformar seu corpo em 30 dias com o método Gladiador.",
+    subtitle: "Descubra como transformar seu corpo em 30 dias com o método Miri.",
     bg: "bg-[#0A0A0A]",
     cta: "Explorar Módulos",
     image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop",
@@ -36,7 +38,7 @@ const banners = [
   {
     id: 2,
     titleTop: "QUER O PAINEL DE",
-    titleMain: "GLADIADOR\nCOMPLETO?",
+    titleMain: "MIRI\nCOMPLETO?",
     subtitle: "O desafio é apenas o aquecimento. No Infosaas, você tem acompanhamento especializado e acesso a ferramentas de elite:",
     bg: "bg-[#0A0A0A]",
     cta: "QUERO O ACESSO COMPLETO",
@@ -44,7 +46,7 @@ const banners = [
     features: [
       "Planos de treino 100% personalizados",
       "Ajuste de macros em tempo real",
-      "Comunidade exclusiva Gym Rats"
+      "Comunidade exclusiva Ranking do Mês"
     ]
   }
 ];
@@ -58,13 +60,13 @@ const modules = [
 ];
 
 const lessons = [
-  { id: 1, title: "Boas-vindas ao Coliseu", duration: "05:20", status: "completed", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+  { id: 1, title: "Boas-vindas ao Desafio", duration: "05:20", status: "completed", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
   { id: 2, title: "Mentalidade Inabalável", duration: "12:45", status: "in-progress", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
   { id: 3, title: "Como usar as planilhas", duration: "08:15", status: "locked", videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
 ];
 
 const diets = [
-  { id: 1, name: "Cutting Gladiador", goal: "Emagrecimento", cals: "1800 kcal", tag: "Definição" },
+  { id: 1, name: "Cutting Miri", goal: "Emagrecimento", cals: "1800 kcal", tag: "Definição" },
   { id: 2, name: "Bulking de Respeito", goal: "Ganho de Massa", cals: "2800 kcal", tag: "Volume" },
 ];
 
@@ -186,9 +188,32 @@ const BannerCarousel = () => {
 };
 
 const Challenge = () => {
+  const { user } = useAuth();
   const [selectedModule, setSelectedModule] = useState(modules[0]);
   const [activeLesson, setActiveLesson] = useState(lessons[0]);
   const [addedItems, setAddedItems] = useState<string[]>([]);
+
+  const calculateCycleDay = () => {
+    if (!user?.created_at) return 1;
+    const createdDate = new Date(user.created_at);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - createdDate.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    let currentDay = (diffDays % 30) + 1;
+    return currentDay;
+  };
+  
+  const cycleDay = calculateCycleDay();
+
+  const getModuleOfTheMonth = () => {
+    const months = [
+      "Mindset Guardião", "Nutrição Metabólica", "Força Pura", "Resistência",
+      "Flexibilidade e Mobilidade", "Biohacking Diário", "Foco Extremo",
+      "Recuperação Ativa", "Hipertrofia Glúteos", "Definição Abdominal",
+      "Alta Performance", "Revisão do Ano"
+    ];
+    return months[new Date().getMonth()];
+  };
 
   const toggleItem = (id: string, type: 'dieta' | 'treino') => {
     if (addedItems.includes(id)) return;
@@ -210,20 +235,45 @@ const Challenge = () => {
               ÁREA DE <span className="text-accent">MEMBROS</span>
             </h1>
             <p className="text-muted mt-2 uppercase tracking-[0.3em] font-medium text-sm">
-              Desafio Shape Insano • Gladiador
+              Desafio Miris No Foco
             </p>
           </div>
-          <div className="bg-muted/40 dark:bg-white/5 border border-border dark:border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4">
-             <div className="h-2 w-32 bg-muted dark:bg-white/10 rounded-full overflow-hidden">
-                <div className="h-full bg-accent w-1/3" />
+          
+          {/* Contador de Ciclo Mensal */}
+          <div className="bg-background border border-border px-6 py-4 rounded-3xl flex flex-col gap-3 min-w-[280px] shadow-sm">
+             <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Seu Ciclo Mensal</span>
+                <span className="text-sm font-bold text-accent">Dia {cycleDay} <span className="text-foreground/40 font-normal">de 30</span></span>
              </div>
-             <span className="text-xs font-bold text-accent">33% CONCLUÍDO</span>
+             <div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
+                <div className="h-full bg-accent transition-all duration-1000" style={{ width: `${(cycleDay/30)*100}%` }} />
+             </div>
           </div>
         </div>
 
         {/* Carousel */}
-        <div className="mb-16">
+        <div className="mb-10">
           <BannerCarousel />
+        </div>
+
+        {/* Módulo Dinâmico do Mês */}
+        <div className="mb-16">
+          <div className="bg-accent/10 border border-accent/20 rounded-[2.5rem] p-8 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-[80px]" />
+            <div className="relative z-10 flex items-center gap-6">
+               <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center text-accent shrink-0 border border-accent/30 shadow-[0_0_30px_rgba(255,107,0,0.3)]">
+                  <Star size={32} />
+               </div>
+               <div>
+                  <h4 className="text-xs font-black uppercase text-accent tracking-[0.3em] mb-1">Conteúdo Exclusivo Mensal</h4>
+                  <h3 className="text-2xl font-bold italic text-foreground tracking-tight">{getModuleOfTheMonth()}</h3>
+                  <p className="text-sm text-muted-foreground mt-2 max-w-md">Novo módulo liberado todos os meses. Aproveite o foco deste mês para elevar seu nível.</p>
+               </div>
+            </div>
+            <button className="relative z-10 shrink-0 bg-white hover:bg-white/90 text-black px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all hover:scale-105 shadow-xl">
+               Acessar Módulo
+            </button>
+          </div>
         </div>
 
         {/* Modules Grid */}
@@ -300,17 +350,21 @@ const Challenge = () => {
                            <span className="text-white/40">Módulo: {selectedModule.title}</span>
                         </div>
                       </div>
-                      <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl transition-all font-bold border border-white/5 group">
-                         <Download size={18} className="group-hover:translate-y-0.5 transition-transform" /> Baixar PDF
-                      </button>
                     </div>
                     
                     <div className="bg-background/40 rounded-3xl p-8 border border-border">
-                       <h4 className="text-sm font-black uppercase text-accent tracking-[0.3em] mb-4">Sobre esta aula</h4>
-                       <p className="text-muted-foreground leading-relaxed">
-                         Nesta aula fundamental, mergulhamos nas estratégias do Coliseu para garantir que você saiba exatamente o que fazer 
-                         nos primeiros 7 dias de transição. Foco total em consistência.
-                       </p>
+                       <h4 className="text-sm font-black uppercase text-accent tracking-[0.3em] mb-4">Material da Aula</h4>
+                       <div className="text-muted-foreground leading-relaxed space-y-4">
+                         <p>
+                           Nesta aula fundamental, mergulhamos nas estratégias do Desafio para garantir que você saiba exatamente o que fazer 
+                           nos primeiros 7 dias de transição. Foco total em consistência.
+                         </p>
+                         <p>
+                           <strong>Passo 1:</strong> Organize seu ambiente. O ambiente dita seu sucesso. <br/>
+                           <strong>Passo 2:</strong> Trace metas semanais curtas. <br/>
+                           <strong>Passo 3:</strong> Siga a planilha no menu Treinos e veja o módulo de Dietas para saber seu consumo calórico diário.
+                         </p>
+                       </div>
                     </div>
                   </div>
 
@@ -453,29 +507,24 @@ const Challenge = () => {
                 </div>
               )}
 
-              {selectedModule.type === "community" && (
+               {selectedModule.type === "community" && (
                 <div className="flex flex-col items-center justify-center py-12 text-center max-w-2xl mx-auto">
-                   <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-8 border-2 border-green-500/20 animate-pulse">
-                      <MessageCircle size={48} className="text-green-500" />
+                   <div className="w-24 h-24 bg-accent/20 rounded-full flex items-center justify-center mb-8 border-2 border-accent/20 animate-pulse">
+                      <Users size={48} className="text-accent" />
                    </div>
-                   <h2 className="text-4xl font-black font-cinzel italic mb-4">NOSSA COMUNIDADE</h2>
+                   <h2 className="text-4xl font-black font-cinzel italic mb-4">RANKING DO MÊS</h2>
                    <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
-                     Junte-se a centenas de gladiadores que estão trilhando o mesmo caminho que você. 
-                     Dúvidas, motivação e troca de experiências direto no seu WhatsApp.
+                     Junte-se a centenas de alunas Miri que estão trilhando o mesmo caminho que você. 
+                     Acompanhe o percurso, a evolução e incentive a comunidade na nossa plataforma nativa.
                    </p>
-                   <button className="bg-green-600 hover:bg-green-700 text-white px-12 py-5 rounded-3xl font-black text-lg shadow-2xl shadow-green-600/20 flex items-center gap-4 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest">
-                      Entrar no Grupo VIP <ExternalLink size={24} />
-                   </button>
-                   
-                   <div className="mt-12 w-full max-w-md bg-accent/5 border border-accent/10 rounded-3xl p-6 flex items-center gap-4 group cursor-pointer hover:bg-accent/10 transition-all">
+                   <div className="mt-6 w-full max-w-md bg-accent/5 border border-accent/10 rounded-3xl p-6 flex flex-col items-center gap-4 group hover:bg-accent/10 transition-all">
                       <div className="w-12 h-12 bg-accent/20 rounded-2xl flex items-center justify-center text-accent">
                          <Users size={24} />
                       </div>
-                      <div className="text-left">
-                         <h4 className="text-xs font-black uppercase text-accent tracking-widest">Gym Rats Hub</h4>
-                         <p className="text-[10px] text-muted-foreground">Veja como outros gladiadores estão indo no desafio (Em breve)</p>
+                      <div className="text-center">
+                         <h4 className="text-sm font-black uppercase text-accent tracking-widest">Placar e Interações</h4>
+                         <p className="text-xs text-muted-foreground mt-2">Veja como outras alunas estão indo no desafio através da guia "Comunidade" no menu lateral.</p>
                       </div>
-                      <ChevronRight size={16} className="ml-auto text-accent opacity-0 group-hover:opacity-100 transition-opacity" />
                    </div>
                 </div>
               )}
@@ -490,13 +539,13 @@ const Challenge = () => {
               <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
                  <div>
                     <h3 className="text-3xl md:text-5xl font-cinzel font-black italic mb-6 leading-tight">
-                      QUER O PAINEL DE <br/><span className="text-accent">GLADIADOR COMPLETO?</span>
+                      QUER O PAINEL DE <br/><span className="text-accent">MIRI COMPLETO?</span>
                     </h3>
                     <p className="text-muted-foreground text-lg mb-6 max-w-md">
                       O desafio é apenas o aquecimento. No Infosaas, você tem acompanhamento especializado e acesso a ferramentas de elite:
                     </p>
                     <ul className="space-y-3 mb-8">
-                       {['Planos de treino 100% personalizados', 'Ajuste de macros em tempo real', 'Comunidade exclusiva Gym Rats'].map((item, idx) => (
+                       {['Planos de treino 100% personalizados', 'Ajuste de macros em tempo real', 'Comunidade exclusiva Ranking do Mês'].map((item, idx) => (
                          <li key={idx} className="flex items-center gap-2 text-sm text-foreground/80 font-medium">
                             <CheckCircle2 size={16} className="text-accent" /> {item}
                          </li>
@@ -544,12 +593,12 @@ const Challenge = () => {
                    </div>
                    <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-accent">Marcus Gladius</span>
+                        <span className="font-bold text-accent">Miri Aluna</span>
                         <span className="text-xs text-white/20">Há 2 horas</span>
                       </div>
                       <p className="text-muted-foreground text-sm leading-relaxed">
                         Excelente conteúdo! O módulo de dietas facilitou muito minha organização semanal. 
-                        A aula de boas-vindas já me deu uma clareza absurda. Bora pra cima! 🛡️🔥
+                        A aula de boas-vindas já me deu uma clareza absurda. Bora pra cima! 🏃‍♀️✨
                       </p>
                    </div>
                 </div>

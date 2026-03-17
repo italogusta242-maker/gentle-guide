@@ -62,7 +62,7 @@ export interface GymRatsUser {
 export const mockAvisos: Announcement[] = [
   {
     id: 'a1',
-    author: 'Equipe Shape Insano',
+    author: 'Equipe Miris No Foco',
     authorRole: 'Admin',
     createdAt: 'Hoje, 10:30',
     content: '🔥 NOVIDADE NA ÁREA! O novo módulo de hipertrofia avançada já está disponível para todos os alunos do plano anual. Não percam!',

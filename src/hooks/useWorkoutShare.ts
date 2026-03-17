@@ -29,7 +29,7 @@ export function useWorkoutShare() {
         await navigator.share({
           files: [file],
           title: "Treino Concluído",
-          text: "Mais um dia de vitória no Shape Insano Pro! 🔥",
+          text: "Mais um dia de vitória no Miris No Foco VIP! 🔥",
         });
         return;
       }

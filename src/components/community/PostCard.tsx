@@ -64,7 +64,7 @@ export function PostCard({ post }: { post: any }) {
             )}
           </div>
           <div>
-            <p className="text-sm font-bold font-cinzel text-foreground leading-tight">{post.profiles?.nome || "Gladiador Anônimo"}</p>
+            <p className="text-sm font-bold font-cinzel text-foreground leading-tight">{post.profiles?.nome || "Miri Anônimo"}</p>
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-cinzel">
               {formatDistanceToNow(new Date(post.created_at), { addSuffix: true, locale: ptBR })}
             </p>

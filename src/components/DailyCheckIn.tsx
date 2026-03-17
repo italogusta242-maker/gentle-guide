@@ -14,11 +14,12 @@ interface DailyCheckInProps {
   open: boolean;
   onComplete: (result: CheckInResult) => void;
   onClose: () => void;
+  plannerType?: string;
 }
 
 interface Question {
   id: string;
-  icon: typeof Moon;
+  icon: any;
   question: string;
   options: { label: string; emoji: string; value: number }[];
 }
@@ -57,8 +58,58 @@ const questions: Question[] = [
   },
 ];
 
-// Total steps = questions + sleep duration step + result
-const SLEEP_STEP = questions.length;
+const getPlannerQuestions = (plannerType?: string): Question[] => {
+  if (plannerType === "elite") {
+    return [{
+      id: "acucar",
+      icon: Zap,
+      question: "Consumiu açúcar hoje?",
+      options: [
+        { label: "Não", emoji: "🏆", value: 3 },
+        { label: "Um pouco", emoji: "😔", value: 1 },
+        { label: "Sim, muito", emoji: "❌", value: 0 },
+      ],
+    }, {
+      id: "autocuidado",
+      icon: Brain,
+      question: "Praticou autocuidado hoje?",
+      options: [
+        { label: "Sim", emoji: "🧘", value: 3 },
+        { label: "Parcialmente", emoji: "⏳", value: 1 },
+        { label: "Não", emoji: "❌", value: 0 },
+      ],
+    }];
+  }
+  
+  if (plannerType === "foco_essencial") {
+    return [{
+      id: "leitura",
+      icon: Brain,
+      question: "Leitura do dia concluída?",
+      options: [
+        { label: "Sim", emoji: "📚", value: 3 },
+        { label: "Não", emoji: "❌", value: 0 },
+      ],
+    }];
+  }
+
+  if (plannerType === "constancia") {
+    return [{
+      id: "passos",
+      icon: Moon, // Fallback icon, could use something else if available
+      question: "Bateu sua meta de passos hoje?",
+      options: [
+        { label: "Sim!!", emoji: "🚶", value: 3 },
+        { label: "Mais ou menos", emoji: "📉", value: 1 },
+        { label: "Não", emoji: "❌", value: 0 },
+      ],
+    }];
+  }
+
+  return [];
+};
+
+// Base total steps logic
 
 function calculateMentalState(answers: Record<string, number>, streak: number): MentalState {
   const sleep = answers.sleep ?? 2;
@@ -95,7 +146,7 @@ const sleepLabels: Record<number, string> = {
   10: "+10h 💤",
 };
 
-const DailyCheckIn = ({ open, onComplete, onClose }: DailyCheckInProps) => {
+const DailyCheckIn = ({ open, onComplete, onClose, plannerType }: DailyCheckInProps) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [result, setResult] = useState<MentalState | null>(null);
@@ -103,7 +154,9 @@ const DailyCheckIn = ({ open, onComplete, onClose }: DailyCheckInProps) => {
 
   if (!open) return null;
 
-  const totalSteps = questions.length + 1; // questions + sleep duration
+  const activeQuestions = [...questions, ...getPlannerQuestions(plannerType)];
+  const SLEEP_STEP = activeQuestions.length;
+  const totalSteps = activeQuestions.length + 1; // questions + sleep duration
 
   const handleAnswer = (questionId: string, value: number) => {
     const updated = { ...answers, [questionId]: value };
@@ -113,14 +166,18 @@ const DailyCheckIn = ({ open, onComplete, onClose }: DailyCheckInProps) => {
   };
 
   const handleSleepConfirm = () => {
+    // In the future: incorporate planner habits score into the mental state logic?
+    // For now, calculate normally based on core answers:
     const state = calculateMentalState(answers, 5);
     setResult(state);
+    // Include all answers (core + planner) in the check-in result later if needed
+    // But for now, just the mental state and sleep duration
     setTimeout(() => onComplete({ mentalState: state, sleepDuration }), 1500);
   };
 
-  const isQuestionStep = step < questions.length;
+  const isQuestionStep = step < activeQuestions.length;
   const isSleepStep = step === SLEEP_STEP;
-  const current = isQuestionStep ? questions[step] : null;
+  const current = isQuestionStep ? activeQuestions[step] : null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">

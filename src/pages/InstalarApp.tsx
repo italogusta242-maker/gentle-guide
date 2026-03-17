@@ -46,7 +46,7 @@ const InstalarApp = () => {
             <Check className="w-8 h-8 text-primary" />
           </div>
           <h1 className="text-2xl font-bold font-cinzel text-foreground">App Instalado!</h1>
-          <p className="text-muted-foreground">Abra o Shape Insano pela sua tela inicial.</p>
+          <p className="text-muted-foreground">Abra o App pela sua tela inicial.</p>
         </div>
       ) : isIOS ? (
         <div className="flex flex-col items-center gap-6 text-center max-w-sm">
@@ -63,7 +63,7 @@ const InstalarApp = () => {
           <Download className="w-16 h-16 text-primary" />
           <h1 className="text-2xl font-bold font-cinzel text-foreground">Instalar App</h1>
           <p className="text-muted-foreground">
-            Instale o Shape Insano como um app no seu celular para acesso rápido e experiência completa.
+            Instale o App no seu celular para acesso rápido e experiência completa.
           </p>
           <Button
             size="lg"

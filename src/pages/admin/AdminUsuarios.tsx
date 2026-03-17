@@ -842,7 +842,7 @@ const AdminUsuarios = () => {
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs">Email *</Label>
-                    <Input type="email" placeholder="email@shapeinsano.com" value={newPro.email} onChange={(e) => setNewPro(p => ({ ...p, email: e.target.value }))} className="bg-background border-border" />
+                    <Input type="email" placeholder="email@mirisnofoco.com" value={newPro.email} onChange={(e) => setNewPro(p => ({ ...p, email: e.target.value }))} className="bg-background border-border" />
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-xs">Senha Inicial *</Label>

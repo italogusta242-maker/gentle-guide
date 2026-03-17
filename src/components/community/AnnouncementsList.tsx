@@ -15,7 +15,7 @@ export function AnnouncementsList() {
         return [
           {
             id: "1",
-            title: "Novo Desafio: 30 Dias de Gladiador",
+            title: "Novo Desafio: 30 Dias de Miri",
             content: "Preparem-se, o novo cronograma de treinos e dieta focado em definição extrema começa na próxima segunda-feira!",
             created_at: new Date(Date.now() - 3600000).toISOString(),
             priority: "high"

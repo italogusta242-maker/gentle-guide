@@ -131,6 +131,8 @@ export interface UserData {
   foto_pose_frente: File | null;
   foto_pose_lado: File | null;
   foto_pose_costas: File | null;
+  // Planner
+  planner_type: string;
   // Treino
   pratica_musculacao: string;
   local_treino: string;
@@ -194,6 +196,7 @@ export const initialUserData: UserData = {
   foto_frente: null, foto_costas: null, foto_direito: null, foto_esquerdo: null, foto_perfil: null,
   objetivo: "", objetivo_outro: "", fisiculturismo: "", influenciador_favorito: "",
   foto_pose_frente: null, foto_pose_lado: null, foto_pose_costas: null,
+  planner_type: "",
   pratica_musculacao: "", local_treino: "", maquinas_casa: "",
   dias_semana: [], frequencia: "", horario_treino: "", tempo_treino: "", tempo_cardio: "",
   treino_antigo: null,
@@ -277,6 +280,7 @@ export const stepValidation: Partial<Record<Step, (data: UserData) => string[]>>
   objetivo: (d) => {
     const missing: string[] = [];
     if (!d.objetivo || d.objetivo.trim() === "") missing.push("objetivo");
+    if (!d.planner_type || d.planner_type.trim() === "") missing.push("planner_type");
     return missing;
   },
 };

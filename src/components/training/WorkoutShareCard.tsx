@@ -140,11 +140,11 @@ const WorkoutShareCard = forwardRef<HTMLDivElement, WorkoutShareCardProps>(
         {/* Logo */}
         <img
           src={insanoLogo}
-          alt="Shape Insano"
+          alt="Miris No Foco"
           style={{ width: 34, height: 48, marginBottom: 8, objectFit: "contain" as const }}
         />
 
-        {/* SHAPE INSANO */}
+        {/* MIRIS NO FOCO */}
         <div
           style={{
             fontFamily: "'Sora', sans-serif",
@@ -156,7 +156,7 @@ const WorkoutShareCard = forwardRef<HTMLDivElement, WorkoutShareCardProps>(
             textShadow: "0px 2px 4px rgba(0, 0, 0, 0.8)",
           }}
         >
-          SHAPE INSANO
+          MIRIS NO FOCO
         </div>
       </div>
     );

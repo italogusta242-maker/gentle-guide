@@ -31,10 +31,10 @@ export function GymRatsTab({ isLoading }: GymRatsTabProps) {
       {/* Header Info */}
       <div className="text-center mb-8">
         <h2 className="font-cinzel text-xl md:text-2xl font-black italic tracking-wider text-foreground uppercase flex items-center justify-center gap-2">
-          <Trophy className="text-accent" /> TOP GLADIADORES
+          <Trophy className="text-accent" /> TOP MIRIES
         </h2>
         <p className="text-muted-foreground text-sm mt-2">
-          Mantenha a consistência, suba de nível e alcance o topo do Coliseu.
+          Mantenha a consistência, suba de nível e alcance o topo do Desafio.
         </p>
       </div>
 

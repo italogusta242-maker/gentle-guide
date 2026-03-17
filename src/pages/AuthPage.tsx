@@ -38,10 +38,10 @@ const AuthPage = () => {
           <InsanoLogo size={88} className="mx-auto" />
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.25 }} className="font-cinzel text-4xl md:text-5xl font-bold text-foreground text-center tracking-wide mb-2">
-          <span className="gold-text-gradient">SHAPE INSANO</span>
+          <span className="gold-text-gradient">INFOSAAS ANAAC</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.2 }} className="font-cinzel text-sm text-muted-foreground tracking-[0.3em] uppercase mb-2 text-center">
-          Ser Insano é Ser Um Vencedor
+          Inovação e Gestão de Alta Performance
         </motion.p>
         <div className="w-16 h-px bg-gradient-to-r from-transparent via-accent to-transparent mb-6" />
 

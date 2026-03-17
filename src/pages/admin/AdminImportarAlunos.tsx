@@ -118,7 +118,7 @@ const AdminImportarAlunos = () => {
                 <Upload size={32} className="mx-auto text-muted-foreground mb-3" />
                 <p className="text-sm text-foreground mb-1">Arraste o CSV exportado do Google Forms</p>
                 <p className="text-xs text-muted-foreground mb-4">
-                  O arquivo deve ser o export do formulário "Anamnese Clube Shape Insano"
+                  O arquivo deve ser o export do formulário "Anamnese Clube Miris No Foco"
                 </p>
                 <Input
                   type="file"

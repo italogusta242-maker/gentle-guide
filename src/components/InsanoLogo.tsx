@@ -1,22 +1,13 @@
-import insanoLogo from "@/assets/insano-logo.svg";
-
 interface InsanoLogoProps {
   size?: number;
   className?: string;
 }
 
-const InsanoLogo = ({ size = 40, className = "" }: InsanoLogoProps) => {
+const InsanoLogo = ({ size = 24, className = "" }: InsanoLogoProps) => {
   return (
-    <img
-      src={insanoLogo}
-      alt="SHAPE INSANO"
-      width={size}
-      height={size}
-      fetchPriority="high"
-      loading="eager"
-      className={`drop-shadow-none ${className}`}
-      style={{ filter: "none" }}
-    />
+    <div className={`font-cinzel font-bold tracking-tight text-primary flex items-center ${className}`} style={{ fontSize: size }}>
+      miris no foco<span className="text-secondary-foreground">.</span>
+    </div>
   );
 };
 

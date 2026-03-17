@@ -79,7 +79,7 @@ const PWAInstallBanner = () => {
               <div className="w-11 h-11 rounded-xl bg-accent/15 flex items-center justify-center shrink-0">
                 <img
                   src="/insano-icon-192.png"
-                  alt="Shape Insano"
+                  alt="Miris No Foco"
                   className="w-8 h-8 rounded-lg"
                 />
               </div>

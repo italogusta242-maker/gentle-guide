@@ -7,8 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Dumbbell, Play, ChevronDown, ChevronUp, ArrowLeft, Check,
   Timer, RefreshCw, Weight, Clock, Flame, MessageSquare,
-  History, X, AlertTriangle, Trophy, Youtube,
-  ClipboardList, Target, TrendingUp, FileText, Share2,
+  History, X, AlertTriangle, Trophy, Youtube, Loader2,
+  ClipboardList, Target, TrendingUp, FileText, Share2, Navigation
 } from "lucide-react";
 import WorkoutShareCard from "@/components/training/WorkoutShareCard";
 import { useWorkoutShare } from "@/hooks/useWorkoutShare";
@@ -890,7 +890,7 @@ const Treinos = () => {
               <Dumbbell size={40} className="text-accent" />
             </div>
             <div>
-              <h2 className="font-cinzel text-xl font-bold text-foreground mb-2 italic tracking-tighter">O FORJADOR ESTÁ TRABALHANDO</h2>
+              <h2 className="font-cinzel text-xl font-bold text-foreground mb-2 italic tracking-tighter">SELECIONE O SEU PLANO NA ÁREA DE MEMBROS</h2>
               <p className="text-sm text-muted-foreground max-w-[280px] mx-auto leading-relaxed">
                 Seu mestre de armas está forjando um plano de elite para sua transformação. 
                 Mantenha a disciplina, o chamado virá em breve. ⚔️
@@ -962,6 +962,45 @@ const Treinos = () => {
             <Progress value={totalSessions > 0 ? (sessionsCompleted / totalSessions) * 100 : 0} className="h-2" />
           </div>
         </div>}
+
+        {/* Módulo de Corrida (Running Plan) */}
+        <div className="bg-card border border-border rounded-xl p-5 mb-4 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="flex items-center gap-3 mb-4 relative">
+             <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center shrink-0">
+                <Navigation size={20} className="text-accent ml-1" />
+             </div>
+             <div>
+                <h3 className="font-cinzel font-bold text-foreground">Plano de Corrida</h3>
+                <p className="text-[11px] text-muted-foreground">Cardio & Resistência</p>
+             </div>
+          </div>
+          
+          <div className="space-y-3 relative">
+             <div className="bg-secondary/40 border border-border rounded-lg p-3 flex items-center justify-between">
+                <div>
+                   <p className="text-xs font-bold text-foreground mb-0.5">Treino A (Tiro)</p>
+                   <p className="text-[10px] text-muted-foreground">10x 1min Forte / 1min Leve</p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center">
+                   <Play size={12} className="text-accent ml-0.5" />
+                </div>
+             </div>
+             <div className="bg-secondary/40 border border-border rounded-lg p-3 flex items-center justify-between">
+                <div>
+                   <p className="text-xs font-bold text-foreground mb-0.5">Treino B (Longo)</p>
+                   <p className="text-[10px] text-muted-foreground">5km ritmo contínuo leve</p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center">
+                   <Play size={12} className="text-accent ml-0.5" />
+                </div>
+             </div>
+          </div>
+          
+          <button className="w-full mt-4 py-2 bg-secondary border border-border text-foreground text-xs font-bold rounded-lg hover:border-accent/40 transition-colors">
+            Ver Planilha Completa
+          </button>
+        </div>
 
       </div>
     );
